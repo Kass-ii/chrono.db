@@ -46,7 +46,6 @@ int create_tree();
 
 int main(int argc, char argv[])
 {
-    create_tree();
 }
 
 int create_tree()
@@ -67,8 +66,34 @@ int create_tree()
 
 void *sort()
 {
+
+    // sort goes
+    //  left = small
+    //  right == large
+
+    // sorting will go heap sort
 }
 
-Node *search(Node *start, int key[])
-{ // return pointer to node with correct data
+Node *search(Node *start, int key_find)
+{
+
+    Node *Current_node = start;
+
+    while (Current_node->type != LEAF)
+    { // checks if node is internal
+        int i = 0;
+        for (int i; i < Current_node->key_count /* key count because that specefic key count*/; i++)
+        {
+
+            if (key_find < Current_node->key[i])
+            { // checks if key of internal node and key key are the same
+                // not less than EQUAL becauise should be first key found
+                break;
+            }
+            else if ()
+        }
+        Current_node = Current_node->internal.child_pointers[i];
+    }
+
+    return Current_node; // you return because the while stastement is over, because this means the current node is a leaf
 }
