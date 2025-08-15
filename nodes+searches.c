@@ -109,12 +109,12 @@ void verify_to_insert(Node *start, int key, void *datapointer)
 
     Node *curr_leaf_node = search(start, key);
 
-    // key_find is the matching elemtn
+    // key_find is the matching element
     int i = 0;
     if (curr_leaf_node->key_count < MAX_KEY)
     { // if key count isnt full there is space
 
-        insert(curr_leaf_node, key, datapointer);
+        insert_into_leaf(curr_leaf_node, key, datapointer);
     }
     else
     { // key count is full, now split
@@ -124,6 +124,35 @@ void verify_to_insert(Node *start, int key, void *datapointer)
     }
 }
 
-int split(Node *curr_leaf_node, int key, void *datapointer)
+void insert_into_leaf(Node *curr_leaf_node, int key, void *datapointer)
 {
+    int i = 0;
+    while (i < curr_leaf_node->key_count && curr_leaf_node->key[i] < key)
+    {
+        i++;
+    }
+
+    int count = curr_leaf_node->key_count;
+
+    for (int j = count; j > i; j--)
+    {
+        curr_leaf_node->key[j] = curr_leaf_node->key[j - 1];
+
+        curr_leaf_node->leaf.data_pointers[j] = curr_leaf_node->leaf.data_pointers[j - 1];
+    }
+
+    curr_leaf_node->key[i] = key;
+
+    curr_leaf_node->leaf.data_pointers[i] = datapointer;
+
+    curr_leaf_node->key_count++;
+}
+
+void split_and_insert(Node *curr_leaf_node, int key, void *datapointer)
+{
+
+    char temp[MAX_CHILDREN + 1] = curr_leaf_node->key[MAX_KEY];
+    char point_temp[MAX_CHILDREN + 1] = curr_leaf_node->leaf.data_pointers[MAX_CHILDREN];
+
+    Node *new_leaf = malloc(MAX_KEY);
 }

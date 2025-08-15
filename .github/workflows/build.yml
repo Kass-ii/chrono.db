@@ -1,0 +1,29 @@
+# Name of the workflow
+name: C/C++ CI
+
+# This workflow runs on every push to the main branch
+on:
+  push:
+    branches: [ "main" ]
+  pull_request:
+    branches: [ "main" ]
+
+# A job is a set of steps that execute on a virtual machine
+jobs:
+  build:
+    # Use the latest version of Ubuntu as the operating system
+    runs-on: ubuntu-latest
+
+    steps:
+    # Step 1: Checks out your repository's code
+    - uses: actions/checkout@v3
+
+    # Step 2: Compiles the C code
+    - name: Compile
+      run: gcc -o mydb *.c
+
+    # Step 3 (Optional): Run a simple check
+    # For now, this just lists the files to show it worked.
+    # Later, you can replace this with a command to run your tests.
+    - name: Run Check
+      run: ls -l
