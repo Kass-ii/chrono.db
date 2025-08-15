@@ -31,7 +31,7 @@ void recover_from_WAL()
     if (database == NULL)
     {
         printf("error, file did not open - recovery from WAL fn");
-        return -1;
+        return;
     }
 
     printf("---Recovery from WAL flagged...starting---");
