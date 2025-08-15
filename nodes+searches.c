@@ -15,7 +15,7 @@ typedef struct Node Node; // declaration
 struct Node
 {
     NodeType type;    // will pull from enum name and correspond
-    int key_count;    // keys currently in node
+    int key_count;    // # of keys currently in node
     int key[MAX_KEY]; // array that holds the keys
 
     union
@@ -82,18 +82,48 @@ Node *search(Node *start, int key_find)
     while (Current_node->type != LEAF)
     { // checks if node is internal
         int i = 0;
-        for (int i; i < Current_node->key_count /* key count because that specefic key count*/; i++)
+        int count = 0;
+        for (i; i < Current_node->key_count /* key count because that specefic key count*/; i++)
         {
 
             if (key_find < Current_node->key[i])
             { // checks if key of internal node and key key are the same
                 // not less than EQUAL becauise should be first key found
+                count = 1;
                 break;
             }
-            else if ()
         }
+        if (!count)
+        {                                // edge case, might be useless key_find greater than all
+            i = Current_node->key_count; // i stays whatever it is, for loop now exits because condition is met to end
+        } // outside of foor loop bc as long as the key i bigger it will continue to not set and close out
+
         Current_node = Current_node->internal.child_pointers[i];
     }
 
     return Current_node; // you return because the while stastement is over, because this means the current node is a leaf
+}
+
+void verify_to_insert(Node *start, int key, void *datapointer)
+{
+
+    Node *curr_leaf_node = search(start, key);
+
+    // key_find is the matching elemtn
+    int i = 0;
+    if (curr_leaf_node->key_count < MAX_KEY)
+    { // if key count isnt full there is space
+
+        insert(curr_leaf_node, key, datapointer);
+    }
+    else
+    { // key count is full, now split
+
+        printf("CURRENT LEAF NODE WAS FULL...splitting  ");
+        split(curr_leaf_node, key, datapointer);
+    }
+}
+
+int split(Node *curr_leaf_node, int key, void *datapointer)
+{
 }
