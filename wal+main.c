@@ -2,9 +2,10 @@
 #include <unistd.h> // Required for fsync
 #include "wal.h"
 
-#define LOG_FILE "database.log"
+// #define LOG_FILE "database.log"
+static int next_txn_id = 1;
 
-int wal_append_insert(int key, const char *value)
+int wal_append_insert(int key, const char *value, int transaction_id)
 {
     FILE *database = fopen("database.txt", "a");
     if (database == NULL)
@@ -13,7 +14,7 @@ int wal_append_insert(int key, const char *value)
         return -1;
     }
 
-    fprintf(database, "INSERT;%d;%s\n", key, value);
+    fprintf(database, "%d;INSERT;%d;%s\n", transaction_id, key, value);
 
     fflush(database);
 
@@ -41,9 +42,10 @@ void recover_from_WAL()
     while (fgets(line_buffer, sizeof(line_buffer), database))
     {
         int key;
+        int txn_id;
         char value[100];
 
-        if (sscanf(line_buffer, "INSERT;%d;%99s", &key, value) == 2)
+        if (sscanf(line_buffer, "%d;INSERT;%d;%99s", &txn_id, &key, value) == 3) // reading so dont need ot pass in a value
         {
             printf("Recovery: Re-applying insert for key %d, value %s\n", key, value);
         }
@@ -52,29 +54,60 @@ void recover_from_WAL()
     fclose(database);
 }
 
+int wal_begin_transaction(void)
+{ // multiple transction at once
+
+    /* set varible to the static so you can increment the
+    actual static var for next run, and return current number do you have
+    the unique identifier  */
+
+    int current = next_txn_id;
+
+    next_txn_id++;
+
+    return current;
+}
+
+int wal_commit_transaction(int txt_id)
+{ // ensures the finished step is initiated and logged
+    FILE *database = fopen("database.txt", "a");
+    if (database == NULL)
+    {
+        perror("Failed to open file - wal commit function");
+        return -1;
+    }
+
+    fprintf(database, "%d;COMMIT\n", txt_id);
+
+    fflush(database);
+
+    int file_descript = fileno(database);
+    fsync(file_descript);
+
+    fclose(database);
+
+    return 0;
+}
+
 int main()
 {
-    printf("Logging an operation...\n");
-    int result = wal_append_insert(101, "Alice");
-    if (result == 0)
-    {
-        printf("Log entry written successfully.\n");
-    }
-    else
-    {
-        printf("Failed to write log entry.\n");
-    }
+    /* recovery */
+    recover_from_WAL();
 
-    wal_append_insert(102, "Bob");
-    wal_append_insert(103, "Charlie");
+    /* generate begin transactions*/
+    printf("---starting transaction ID generation---");
+    int txt_id = wal_begin_transaction();
+    printf("---Transaction started - unique doe is %d---", txt_id);
 
+    /* insert */
+    wal_append_insert(102, txt_id, "Bob");
+    wal_append_insert(103, txt_id, "Charlie");
+
+    /* commit */
+    wal_commit_transaction(txt_id);
+
+    printf("Transactions were logged");
     printf("Check the 'database.log' file to see the results.\n");
-
-    void recover_from_WAL();
-
-    printf("\nLogging a new operation...\n");
-    wal_append_insert(104, "David");
-    printf("New operation logged. Program will now exit.\n");
 
     return 0;
 }
