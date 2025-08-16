@@ -1,6 +1,7 @@
 #include <stdio.h>
 #include <unistd.h> // Required for fsync
 #include "wal.h"
+#define MAX_COMMITTED_TXNS 100
 
 // #define LOG_FILE "database.log"
 static int next_txn_id = 1;
@@ -37,7 +38,25 @@ void recover_from_WAL()
 
     printf("---Recovery from WAL flagged...starting---");
 
+    int commit_count = 0;
+    int commit_txns[MAX_COMMITTED_TXNS];
     char line_buffer[256];
+
+    // finds all "commits" made
+    while (fgets(line_buffer, sizeof(line_buffer), database))
+    {
+        int txn_id;
+
+        if (sscanf(line_buffer, "%d;COMMIT", &txn_id) == 1)
+        {
+            if (commit_count < MAX_COMMITTED_TXNS)
+            {                                         // can only have limited amount of commits, so make sure you arent reaching over
+                commit_txns[commit_count++] = txn_id; //
+            }
+        }
+    }
+
+    rewind(database); // pointer is set to end so use this to reset the pointer to begin
 
     while (fgets(line_buffer, sizeof(line_buffer), database))
     {
@@ -45,9 +64,24 @@ void recover_from_WAL()
         int txn_id;
         char value[100];
 
-        if (sscanf(line_buffer, "%d;INSERT;%d;%99s", &txn_id, &key, value) == 3) // reading so dont need ot pass in a value
+        if (sscanf(line_buffer, "%d;INSERT;%d;%99s", &txn_id, &key, value) == 3)
         {
-            printf("Recovery: Re-applying insert for key %d, value %s\n", key, value);
+            // reading so dont need ot pass in a value
+            // this checks if all the lines are correct how theyre supposed to be
+            int was_committed = 0;
+            for (int i = 0; i < commit_count; i++)
+            {
+                if (commit_txns[i] == txn_id)
+                {
+                    was_committed = 1;
+                    break;
+                }
+            }
+
+            if (was_committed)
+            {
+                printf("Recovery: Re-applying insert for key %d, value %s\n", key, value);
+            }
         }
     }
     printf("--- Recovery Completed ---\n");
@@ -100,8 +134,8 @@ int main()
     printf("---Transaction started - unique doe is %d---", txt_id);
 
     /* insert */
-    wal_append_insert(102, txt_id, "Bob");
-    wal_append_insert(103, txt_id, "Charlie");
+    wal_append_insert(102, "Kassidy", txt_id);
+    wal_append_insert(102, "Tuan", txt_id);
 
     /* commit */
     wal_commit_transaction(txt_id);
