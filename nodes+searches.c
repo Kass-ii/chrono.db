@@ -187,7 +187,7 @@ void split_and_insert(Node *curr_leaf_node, int key, void *datapointer)
 
         // for(int k = 0; k <= 0; k++){
         int hold = 0;
-        for (int o = 0; o < MAX_KEY; o++)
+        for (int o = 0; o <= MAX_KEY; o++)
         { // check
             while (curr_leaf_node->key[o] != NULL)
                 ;
@@ -198,11 +198,15 @@ void split_and_insert(Node *curr_leaf_node, int key, void *datapointer)
             { // y is now set to the numebr of cells that are filled
                 // for(int n = i; i < MAX_KEY; n++){
                 //  set to i because that was the checks keys that the new key needs to come after
-                //  increment i and thats what key is now supposed to be set tO? or maybe i + 1 or i - 1
-
-                // move all the keys over
-                curr_leaf_node->key[y + 1] = curr_leaf_node->key[y];
-                // move the keys over by one creating the new space
+                //  increment i and thats what key is now supposed to be set to? or maybe i + 1 or i - 1
+                int idk = i;
+                while (idk)
+                {
+                    // move all the keys over
+                    curr_leaf_node->key[y + 1] = curr_leaf_node->key[y];
+                    idk--;
+                    // move the keys over by one creating the new space
+                }
 
                 //}
             }
