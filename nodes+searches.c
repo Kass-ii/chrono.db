@@ -176,6 +176,36 @@ void split_and_insert(Node *curr_leaf_node, int key, void *datapointer)
     // if its not full, insert the NEW key
     else
     {
-        // double for loop or bianry search whichever is easier
+        int count = 0;
+        while (key <= curr_leaf_node->key[count])
+        {
+            count++;
+            // double for loop or bianry search whichever is easier
+        }
+
+        // need to take into account for the array not being full, wont always be one less
+
+        // for(int k = 0; k <= 0; k++){
+        int hold = 0;
+        for (int o = 0; o < MAX_KEY; o++)
+        { // check
+            while (curr_leaf_node->key[o] != NULL)
+                ;
+            count++; // should be hold?????
+            //}
+            // should below be while??
+            for (int y = count; y <= 0; y++)
+            { // y is now set to the numebr of cells that are filled
+                // for(int n = i; i < MAX_KEY; n++){
+                //  set to i because that was the checks keys that the new key needs to come after
+                //  increment i and thats what key is now supposed to be set tO? or maybe i + 1 or i - 1
+
+                // move all the keys over
+                curr_leaf_node->key[y + 1] = curr_leaf_node->key[y];
+                // move the keys over by one creating the new space
+
+                //}
+            }
+            curr_leaf_node->key[i] = key;
+        }
     }
-}
