@@ -9,18 +9,14 @@ typedef struct
 
 int parse_insert(const char *query, InsertStatement *stmt)
 {
-
     int result = sscanf(query, "INSERT INTO %s VALUES (%d, %s);",
                         stmt->table_name, &stmt->id, stmt->name);
-
     if (result == 3)
     {
-
         return 0;
     }
     else
     {
-
         return -1;
     }
 }

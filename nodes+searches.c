@@ -35,7 +35,6 @@ struct Node
 
 struct Tree
 {
-
     Node *root;
 };
 Tree_system;
@@ -151,8 +150,32 @@ void insert_into_leaf(Node *curr_leaf_node, int key, void *datapointer)
 void split_and_insert(Node *curr_leaf_node, int key, void *datapointer)
 {
 
-    char temp[MAX_CHILDREN + 1] = curr_leaf_node->key[MAX_KEY];
-    char point_temp[MAX_CHILDREN + 1] = curr_leaf_node->leaf.data_pointers[MAX_CHILDREN];
+    int j = 0;
+    int i = 0;
 
-    Node *new_leaf = malloc(MAX_KEY);
+    int temp_keys[MAX_KEY + 1]; // one more to hold the extra new key
+
+    void *temp_pointers[MAX_KEY + 1]; // one more to hold the extra new pointer
+
+    Node *new_leaf = (Node *)malloc(sizeof(Node));
+
+    // binary search to find the middle key??
+    // need to pull the middle key into the parent node
+
+    while (curr_leaf_node->key[i] != NULL)
+    {
+        i++;
+    }
+
+    if (curr_leaf_node->key[i + 1] >= temp_keys)
+    {
+        // means the array is full
+        // call split parent array or do it in this function
+    }
+
+    // if its not full, insert the NEW key
+    else
+    {
+        // double for loop or bianry search whichever is easier
+    }
 }
