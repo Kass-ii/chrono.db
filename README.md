@@ -10,8 +10,8 @@ Table of Contents:
 
 # Introduction (≧◡≦) ♡
 
-Hi, My name is Kassidy Satterfield. I am a student at UT Arlington, with a passion in tech. I have a deep understanding of system / infrastructure and backend. I like to make complex tools just to understand them. I like building tools and adding on anything new I can think of.
+Hi, my name is Kassidy Satterfield. I am a student at UT Arlington with a passion for tech. I have a deep understanding of systems, infrastructure, and backend development. I like to build complex tools just to understand them better. Creating new tools and adding anything I can think of is something I genuinely enjoy.
 
 # Why I made ChronoDB (づ｡◕‿‿◕｡)づ
 
-At one of my past internships, we used a lot of internal tooling but we didnt have a good enough understanding of how it worked. I personally didnt like that, as I always want to know how something works. So instead of relying on our own database tool, I made my own so I understand every aspect and could change what I saw fit. It's soemthing that brings me joy when I understand how something complex works. 
+At one of my past internships, we used a lot of internal tooling, but we didn’t have a solid understanding of how it actually worked. I personally didn’t like that, because I always want to know how something works. So instead of relying on our existing database tool, I made my own so I could understand every aspect of it and change anything I saw fit. It brings me joy to fully grasp how something complex operates. 
